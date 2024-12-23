@@ -1,1 +1,1 @@
-# agentman-chat-clients-js
+# ChatClient in Javascript
