@@ -1,0 +1,48 @@
+const path = require('path');
+
+module.exports = {
+  entry: './index.ts',
+  mode: 'production',
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: path.resolve(__dirname, 'tsconfig.json'),
+              transpileOnly: false
+            }
+          }
+        ],
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.svg$/,
+        type: 'asset/source'
+      }
+    ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+    modules: [
+      path.resolve(__dirname),
+      'node_modules'
+    ]
+  },
+  output: {
+    filename: 'index.js',
+    path: path.resolve(__dirname, 'dist'),
+    library: {
+      name: '@agentman/chat-widget',
+      type: 'umd',
+      export: 'default'
+    },
+    globalObject: 'this'
+  },
+  externals: {
+    'react': 'react',
+    'react-dom': 'react-dom'
+  }
+};

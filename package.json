@@ -1,0 +1,54 @@
+{
+  "name": "@agentman/chat-widget",
+  "version": "0.9.2",
+  "description": "A customizable chat widget for Agentman AI integration",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "webpack && tsc --emitDeclarationOnly",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run build && git add -A dist",
+    "postversion": "git push && git push --tags",
+    "test": "echo \"No tests specified\" && exit 0",
+    "lint": "echo \"No lint specified\" && exit 0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "tag": "latest"
+  },
+  "keywords": [
+    "chat",
+    "widget",
+    "agentman",
+    "ai",
+    "chatbot",
+    "typescript"
+  ],
+  "author": "Agentman",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agentman-ai/chat-widget.git"
+  },
+  "bugs": {
+    "url": "https://github.com/agentman-ai/chat-widget/issues"
+  },
+  "homepage": "https://github.com/agentman-ai/chat-widget#readme",
+  "devDependencies": {
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.7.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  }
+}

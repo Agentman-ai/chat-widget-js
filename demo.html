@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatWidget Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        #chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <h1>ChatWidget Demo</h1>
+    <div id="chat-container"></div>
+
+    <!-- Include the bundled widget -->
+    <script src="dist/chat-widget.js"></script>
+    <script>
+        const config = {
+            apiUrl: 'https://studio-api.chainofagents.ai',
+            agentToken: '.eJyrVipJzUvMK4nPTFGyMjHTUUosKMjJTE4syczPQ4ilp0JVGBqa1wIAxoEQ6Q.Z32csg.xbR3NqyuNlDpt-Dafp1O2GpKw5U',
+            variant: 'corner',
+            containerId: 'chat-container',
+            initiallyOpen: false,
+            title: 'Agentman Assistant',
+            position: 'bottom-right',
+            initialMessage: 'Hello!',
+            initialHeight: '600px',
+            initialWidth: '400px',
+            theme: {
+                backgroundColor: '#ffffff',
+                textColor: '#1f2937',
+                buttonColor: '#10b981',
+                buttonTextColor: '#ffffff',
+                agentBackgroundColor: '#f3f4f6',
+                userBackgroundColor: '#10b981',
+                agentForegroundColor: '#000000',
+                userForegroundColor: '#ffffff',
+                headerBackgroundColor: '#059669',
+                headerTextColor: '#ffffff',
+                agentIconColor: '#059669',
+                userIconColor: '#059669'
+            },
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing ChatWidget with config:', config);
+            try {
+                // Initialize the ChatWidget using the exported constructor
+                const chatWidget = new window.ChatWidget(config);
+                console.log('ChatWidget initialized successfully');
+
+                // Add error event listener
+                window.addEventListener('unhandledrejection', function(event) {
+                    console.error('Unhandled promise rejection:', event.reason);
+                });
+
+                // Cleanup on page unload (optional)
+                window.addEventListener('unload', function() {
+                    chatWidget.destroy();
+                });
+            } catch (error) {
+                console.error('Failed to initialize ChatWidget:', error);
+            }
+        });
+    </script>
+</body>
+</html>
