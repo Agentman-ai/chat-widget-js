@@ -44,3 +44,11 @@ export const maximize = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24
 export const resize = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
   <path stroke-linecap="round" stroke="var(--chat-header-text-color, currentColor)" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
 </svg>`;
+
+export const expand = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--chat-header-text-color, currentColor)">
+  <path d="M3 3h7v2H5v5H3V3m18 0h-7v2h5v5h2V3M3 21h7v-2H5v-5H3v7m18 0h-7v-2h5v-5h2v7"/>
+</svg>`;
+
+export const collapse = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--chat-header-text-color, currentColor)">
+  <path d="M9 3H5v4h2V5h2V3m10 0h-4v2h2v2h2V3M9 21H5v-4h2v2h2v2m10-4h-2v2h-2v2h4v-4"/>
+</svg>`;

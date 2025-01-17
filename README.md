@@ -35,26 +35,55 @@ npm install @agentman/chat-widget
 import { ChatWidget } from '@agentman/chat-widget';
 
 const config = {
+  // Required settings
   agentToken: 'YOUR_AGENT_TOKEN',
   apiUrl: 'https://your-api.com',
   containerId: 'chat-widget-container',
-  variant: 'corner', // or 'centered'
-  position: 'bottom-right', // or 'bottom-left', 'top-right', 'top-left'
+  
+  // Widget appearance
+  variant: 'corner', // 'corner' | 'centered' | 'inline'
+  initialHeight: '600px', // Initial height of the widget
+  initialWidth: '400px',  // Initial width of the widget
+  
+  // Content and behavior
   title: 'Agentman Assistant',
+  placeholder: 'Ask me anything...',
+  toggleText: 'Ask Agentman', // Text shown on the toggle button (corner variant)
   initiallyOpen: false,
   initialMessage: 'Hello! How can I help you today?',
+  
+  // Theme customization
   theme: {
-    headerBackgroundColor: '#059669',
-    headerTextColor: '#ffffff',
-    userIconColor: '#059669',
-    agentIconColor: '#059669'
+    backgroundColor: '#ffffff',    // Main background color
+    textColor: '#111827',         // Main text color
+    buttonColor: '#059669',       // Button background color
+    buttonTextColor: '#ffffff',   // Button text color
+    agentBackgroundColor: '#f3f4f6',  // Agent message background
+    userBackgroundColor: '#10b981',   // User message background
+    agentForegroundColor: '#000000',  // Agent message text
+    userForegroundColor: '#ffffff',   // User message text
+    headerBackgroundColor: '#059669',  // Header background
+    headerTextColor: '#ffffff',       // Header text
+    agentIconColor: '#059669',        // Agent icon color (for SVG)
+    userIconColor: '#059669'          // User icon color (for SVG)
   },
+  
+  // Icons and assets
   icons: {
-    userIcon: 'https://example.com/user-icon.png', // URL or SVG string
-    agentIcon: '<svg>...</svg>' // URL or SVG string
+    closeIcon: '<svg>...</svg>',    // Custom close icon
+    sendIcon: '<svg>...</svg>',     // Custom send icon
+    minimizeIcon: '<svg>...</svg>', // Custom minimize icon
+    maximizeIcon: '<svg>...</svg>', // Custom maximize icon
+    expandIcon: '<svg>...</svg>',   // Custom expand icon
+    collapseIcon: '<svg>...</svg>', // Custom collapse icon
+    reduceIcon: '<svg>...</svg>',   // Custom reduce icon
+    userIcon: 'https://example.com/user-icon.png',  // User avatar
+    agentIcon: '<svg>...</svg>'     // Agent avatar
   },
-  logo: 'https://example.com/logo.png', // URL for the logo
-  headerLogo: 'https://example.com/header-logo.png' // URL for the header logo
+  
+  // Logos
+  logo: 'https://example.com/logo.png',  // Main logo
+  headerLogo: 'https://example.com/header-logo-32x32.png' // Header logo (32x32px)
 };
 
 const chatWidget = new ChatWidget(config);
@@ -71,81 +100,67 @@ chatWidget.destroy();
 
 ## Configuration
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `agentToken` | `string` | Your Agentman API token |
-| `apiUrl` | `string` | The API endpoint URL |
-| `containerId` | `string` | ID of the container element |
-| `variant` | `'corner' \| 'centered'` | Widget placement style |
-| `position` | `'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'` | Widget position |
-| `title` | `string` | Chat widget title |
-| `initiallyOpen` | `boolean` | Whether to open chat on load |
-| `initialMessage` | `string` | Initial bot message |
-| `theme` | `object` | UI theme customization |
-| `icons` | `object` | Icon customization |
-| `logo` | `string` | URL for the main logo |
-| `headerLogo` | `string` | URL for the header logo |
+| Option | Type | Required | Description |
+|--------|------|----------|-------------|
+| `agentToken` | `string` | Yes | Your Agentman API token |
+| `apiUrl` | `string` | Yes | The API endpoint URL |
+| `containerId` | `string` | Yes | ID of the container element |
+| `variant` | `'corner' \| 'centered' \| 'inline'` | No | Widget placement style. Default: 'corner' |
+| `initialHeight` | `string` | No | Initial height of the widget. Example: '600px' |
+| `initialWidth` | `string` | No | Initial width of the widget. Example: '400px' |
+| `title` | `string` | No | Chat widget title. Default: 'Chat Assistant' |
+| `placeholder` | `string` | No | Custom placeholder text for input field. Default: 'Type your message...' |
+| `toggleText` | `string` | No | Text shown on toggle button (corner variant). Default: 'Ask Agentman' |
+| `initiallyOpen` | `boolean` | No | Whether to open chat on load. Default: false |
+| `initialMessage` | `string` | No | Initial bot message |
+| `theme` | `object` | No | UI theme customization (see Theme Customization) |
+| `icons` | `object` | No | Icon customization (see Icon Customization) |
+| `logo` | `string` | No | URL for the main logo |
+| `headerLogo` | `string` | No | URL for the header logo (32x32px) |
 
 ## Theme Customization
 
+The theme object supports the following properties:
+
 ```typescript
 interface ChatTheme {
-  headerBackgroundColor: string;
-  headerTextColor: string;
-  backgroundColor: string;
-  textColor: string;
-  buttonColor: string;
-  buttonTextColor: string;
-  agentBackgroundColor: string;
-  userBackgroundColor: string;
-  agentForegroundColor: string;
-  userForegroundColor: string;
-  agentIconColor: string;  // Color for the agent's icon (when using SVG)
-  userIconColor: string;   // Color for the user's icon (when using SVG)
+  backgroundColor: string;    // Main background color
+  textColor: string;         // Main text color
+  buttonColor: string;       // Button background color
+  buttonTextColor: string;   // Button text color
+  agentBackgroundColor: string;  // Agent message background
+  userBackgroundColor: string;   // User message background
+  agentForegroundColor: string;  // Agent message text
+  userForegroundColor: string;   // User message text
+  headerBackgroundColor: string; // Header background
+  headerTextColor: string;       // Header text
+  agentIconColor: string;        // Agent icon color (for SVG icons)
+  userIconColor: string;         // User icon color (for SVG icons)
 }
 ```
 
 ## Icon Customization
 
-The chat widget supports customization of user and agent icons through the `icons` configuration option. Icons can be specified either as URLs to image files or as SVG strings.
+The chat widget supports customization of all icons through the `icons` configuration option:
 
 ```typescript
 interface ChatIcons {
-  userIcon?: string;  // URL to image or SVG string
-  agentIcon?: string; // URL to image or SVG string
+  closeIcon?: string;    // Close button icon
+  sendIcon?: string;     // Send message button icon
+  minimizeIcon?: string; // Minimize chat icon
+  maximizeIcon?: string; // Maximize chat icon
+  expandIcon?: string;   // Expand chat icon
+  collapseIcon?: string; // Collapse chat icon
+  reduceIcon?: string;   // Reduce size icon
+  userIcon?: string;     // User avatar icon
+  agentIcon?: string;    // Agent avatar icon
 }
 ```
 
-### Icon Types Support
-
-1. **Image URLs**
-   - Supports any valid image URL (PNG, JPG, etc.)
-   - Example: `'https://example.com/user-icon.png'`
-
-2. **SVG Strings**
-   - Supports inline SVG code
-   - Colors can be customized using `userIconColor` and `agentIconColor` in the theme
-   - Example: `'<svg viewBox="0 0 24 24">...</svg>'`
-
-### Logo Customization
-
-The widget also supports custom logos through direct configuration properties:
-
-- `logo`: Main logo URL
-- `headerLogo`: Header logo URL
-
-Example:
-```javascript
-const config = {
-  // ... other config options ...
-  logo: 'https://example.com/logo.png',
-  headerLogo: 'https://example.com/header-logo.png',
-  icons: {
-    userIcon: 'https://example.com/user-icon.png',
-    agentIcon: '<svg viewBox="0 0 24 24">...</svg>'
-  }
-};
-```
+Each icon can be specified as either:
+- A URL to an image file (PNG, JPG, etc.)
+- An SVG string
+- For avatar icons (userIcon, agentIcon), the color can be customized using `userIconColor` and `agentIconColor` in the theme when using SVG
 
 ## License
 

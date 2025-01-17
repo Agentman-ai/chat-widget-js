@@ -46,8 +46,8 @@ export const baseStyles = `
   }
 
   .chat-logo {
-    width: 42px;
-    height: 42px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -71,7 +71,7 @@ export const baseStyles = `
   .chat-header-logo svg {
     width: 100%;
     height: 100%;
-  }  
+  }
 
   .chat-header h3 {
     margin: 0;
@@ -97,6 +97,32 @@ export const baseStyles = `
 
   .chat-header button:hover {
     opacity: 0.8;
+  }
+
+  .chat-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chat-header-button {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: filter 0.2s;
+  }
+
+  .chat-header-button:hover {
+    filter: brightness(1.5);
+  }
+
+  .chat-header-button svg {
+    width: 20px;
+    height: 20px;
   }
 
   .chat-messages {
@@ -156,13 +182,13 @@ export const baseStyles = `
 
   .chat-input {
     width: 100%;
-    min-height: 40px;
+    min-height: 44px;
     max-height: 120px;
-    padding: 8px 44px 8px 12px;
+    padding: 10px 44px 6px 12px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 20px;
     resize: none;
     overflow-y: auto;
     background: white;
@@ -210,14 +236,82 @@ export const baseStyles = `
     color: #6B7280;
   }
 
-  /* Override any external styles that might affect the header text */
-  .chat-header * {
-    color: inherit !important;
+  .desktop-only {
+    display: none;
   }
-  
+
+  @media (min-width: 768px) {
+    .desktop-only {
+      display: flex;
+    }
+  }
+
+  .chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border: none;
+    border-radius: 100px;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    transition: transform 0.2s;
+    z-index: 1000;
+  }
+
+  .chat-toggle:hover {
+    transform: scale(1.05);
+  }
+
+  .chat-toggle-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--chat-header-background-color, #059669);
+    color: var(--chat-header-text-color, #FFFFFF);
+    padding: 8px 16px 8px 8px;
+    border-radius: 100px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .chat-toggle-text {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .chat-expanded {
+    position: fixed !important;
+    top: 12px !important;
+    right: 0 !important;
+    bottom: 12px !important;
+    width: 100vw !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    transition: all 0.3s ease-in-out !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .chat-expanded .chat-container {
+    width: 66.67vw !important;
+    max-width: 700px !important;
+    height: calc(95vh - 24px) !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease-in-out !important;
+  }
+
+  .chat-expanded .chat-messages {
+    height: calc(95vh - 148px) !important; /* 24px margins + 124px for header and input */
+  }
+
   .chat-minimize {
     border: none;
     background: none;
     cursor: pointer;
+  }
+
+  /* Override any external styles that might affect the header text */
+  .chat-header * {
+    color: inherit !important;
   }
 `;

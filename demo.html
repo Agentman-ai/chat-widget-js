@@ -112,6 +112,18 @@
                         <input type="text" id="title" value="Agentman Assistant">
                     </div>
                     <div class="form-group">
+                        <label for="placeholder">Input Placeholder</label>
+                        <input type="text" id="placeholder" value="Ask me anything...">
+                    </div>
+                    <div class="form-group">
+                        <label for="variant">Variant</label>
+                        <select id="variant">
+                            <option value="corner">Corner</option>
+                            <option value="centered">Centered</option>
+                            <option value="inline">Inline</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="initialMessage">Initial Message</label>
                         <input type="text" id="initialMessage" value="Hello!">
                     </div>
@@ -197,6 +209,7 @@
             containerId: 'chat-container',
             initiallyOpen: false,
             title: 'Agentman Assistant',
+            placeholder: 'Ask me anything...',
             position: 'bottom-right',
             initialMessage: 'Hello!',
             initialHeight: '600px',
@@ -257,6 +270,8 @@
             
             // Basic configuration
             config.title = document.getElementById('title').value;
+            config.placeholder = document.getElementById('placeholder').value;
+            config.variant = document.getElementById('variant').value;
             config.initialMessage = document.getElementById('initialMessage').value;
 
             // Theme colors
@@ -295,6 +310,8 @@
         function resetConfig() {
             // Reset form values
             document.getElementById('title').value = defaultConfig.title;
+            document.getElementById('placeholder').value = defaultConfig.placeholder;
+            document.getElementById('variant').value = defaultConfig.variant;
             document.getElementById('initialMessage').value = defaultConfig.initialMessage;
             document.getElementById('backgroundColor').value = defaultConfig.theme.backgroundColor;
             document.getElementById('headerBackgroundColor').value = defaultConfig.theme.headerBackgroundColor;

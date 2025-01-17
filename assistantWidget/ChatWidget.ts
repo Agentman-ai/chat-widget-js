@@ -6,7 +6,7 @@ import { StateManager } from './StateManager';
 import { StyleManager } from './styles/style-manager';
 import { MessageRenderer } from './message-renderer/message-renderer'
 import { OfflineParser } from './message-renderer/offline-parser';
-import { user, agent, close, send, minimize, maximize, resize } from './assets/icons';
+import { user, agent, close, send, minimize, maximize, resize, expand, collapse } from './assets/icons';
 import { logo, logo as headerLogo } from './assets/logo';
 import { isImageUrl, getIconHtml } from './utils/icon-utils';
 
@@ -38,7 +38,8 @@ export class ChatWidget {
     sendIcon: send,
     minimizeIcon: minimize,
     maximizeIcon: maximize,
-    expandIcon: resize,
+    expandIcon: expand,
+    collapseIcon: collapse,
     reduceIcon: resize,
     userIcon: user,
     agentIcon: agent
@@ -245,6 +246,7 @@ export class ChatWidget {
         buttonTextColor: '#FFFFFF',
         ...config.theme
       },
+      placeholder: config.placeholder || 'Type your message...',
       initiallyOpen: config.initiallyOpen || false,
       icons: {
         closeIcon: config.icons?.closeIcon || ChatWidget.defaultIcons.closeIcon,
@@ -252,6 +254,7 @@ export class ChatWidget {
         minimizeIcon: config.icons?.minimizeIcon || ChatWidget.defaultIcons.minimizeIcon,
         maximizeIcon: config.icons?.maximizeIcon || ChatWidget.defaultIcons.maximizeIcon,
         expandIcon: config.icons?.expandIcon || ChatWidget.defaultIcons.expandIcon,
+        collapseIcon: config.icons?.collapseIcon || ChatWidget.defaultIcons.collapseIcon,
         reduceIcon: config.icons?.reduceIcon || ChatWidget.defaultIcons.reduceIcon,
         userIcon: config.icons?.userIcon || ChatWidget.defaultIcons.userIcon,
         agentIcon: config.icons?.agentIcon || ChatWidget.defaultIcons.agentIcon
@@ -387,6 +390,7 @@ export class ChatWidget {
     if (this.config.variant !== 'corner') return;
 
     const container = this.element.querySelector('.chat-container') as HTMLElement;
+    const input = this.element.querySelector('.chat-input') as HTMLTextAreaElement;
     if (!container) return;
 
     const isMobile = window.innerWidth <= 480;
@@ -409,6 +413,11 @@ export class ChatWidget {
       container.style.right = '20px';
 
       document.body.style.overflow = '';
+    }
+
+    // Ensure input maintains its height
+    if (input && !input.style.height) {
+      input.style.height = '32px';
     }
   }
 
@@ -525,48 +534,38 @@ export class ChatWidget {
         <button class="chat-toggle">
           <div class="chat-toggle-content">
             <div class="chat-logo">
-                ${this.assets.logo}
-              </div>          
+              ${this.assets.logo}
+            </div>
             <span class="chat-toggle-text">${this.config.toggleText || 'Ask Agentman'}</span>
           </div>
         </button>
       ` : ''}
-      <div class="chat-container" style="display: ${this.config.variant !== 'corner' ? 'flex' : 'none'}">
-        <div class="chat-header" style="background-color: ${this.theme.headerBackgroundColor}; color: ${this.theme.headerTextColor}">
+      <div class="chat-container">
+        <div class="chat-header">
           <div class="chat-header-content">
             <div class="chat-logo-title">
-              <div class="chat-logo">
-                ${this.assets.headerLogo}
-              </div>
-              <h3>${this.config.title}</h3>
+              <div class="chat-header-logo">${this.assets.headerLogo}</div>
+              <span>${this.config.title}</span>
             </div>
-            ${showToggle ? `
-              <button class="chat-minimize">
-                ${this.config.icons?.minimizeIcon || ChatWidget.defaultIcons.minimizeIcon}
+            <div class="chat-header-actions">
+              <button class="chat-expand chat-header-button desktop-only">
+                ${this.config.icons?.expandIcon || expand}
               </button>
-            ` : ''}
+              <button class="chat-minimize chat-header-button">
+                ${this.config.icons?.minimizeIcon || minimize}
+              </button>
+            </div>
           </div>
         </div>
         <div class="chat-messages"></div>
-        <div class="chat-loading" style="display: none;">
-          <div class="typing-indicator">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-        <div class="chat-initializing" style="display: none;">
-          <div class="initializing-message">Activating...</div>
-        </div>
         <div class="chat-input-container">
-          <div class="chat-input-wrapper">
-            <textarea
-              class="chat-input"
-              placeholder="Type your message..."
-              rows="1"
-            ></textarea>
-            <button class="chat-send" disabled>
-              ${this.config.icons?.sendIcon || ChatWidget.defaultIcons.sendIcon}
-            </button>
-          </div>
+          <textarea
+            class="chat-input"
+            placeholder="${this.config.placeholder || 'Type your message...'}"
+          ></textarea>
+          <button class="chat-send" disabled>
+            ${this.config.icons?.sendIcon || send}
+          </button>
         </div>
       </div>
     `;
@@ -603,8 +602,15 @@ export class ChatWidget {
     }
 
     if (input) {
+      // Set initial height
+      input.style.height = '44px';
       input.addEventListener('keydown', this.handleInputKeypress);
       input.addEventListener('input', this.handleInputChange);
+    }
+
+    const expandButton = this.element.querySelector('.chat-expand');
+    if (expandButton) {
+      expandButton.addEventListener('click', this.handleExpandClick);
     }
 
     window.addEventListener('resize', this.handleResize.bind(this));
@@ -650,8 +656,11 @@ export class ChatWidget {
     }
 
     this.resizeDebounceTimeout = window.setTimeout(() => {
-      input.style.height = 'auto';
-      input.style.height = `${Math.min(input.scrollHeight, 100)}px`;
+      // Reset height to recalculate
+      input.style.height = '32px';
+      // Set height to max of min-height and scroll height
+      const newHeight = Math.max(32, Math.min(input.scrollHeight, 120));
+      input.style.height = `${newHeight}px`;
     }, 100);
   };
 
@@ -1061,4 +1070,23 @@ export class ChatWidget {
     }, 2000);
   }
 
+  private handleExpandClick = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const isExpanded = this.element.classList.contains('chat-expanded');
+    if (isExpanded) {
+      this.element.classList.remove('chat-expanded');
+      const expandButton = this.element.querySelector('.chat-expand');
+      if (expandButton) {
+        expandButton.innerHTML = this.config.icons?.expandIcon || expand;
+      }
+    } else {
+      this.element.classList.add('chat-expanded');
+      const expandButton = this.element.querySelector('.chat-expand');
+      if (expandButton) {
+        expandButton.innerHTML = this.config.icons?.collapseIcon || collapse;
+      }
+    }
+  }
 }

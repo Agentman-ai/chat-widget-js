@@ -24,12 +24,13 @@ export interface ChatAssets {
 }
 
 export interface ChatIcons {
-  closeIcon: string;
-  sendIcon: string;
-  minimizeIcon: string;
-  maximizeIcon: string;
-  expandIcon: string;
-  reduceIcon: string;
+  closeIcon?: string;
+  sendIcon?: string;
+  minimizeIcon?: string;
+  maximizeIcon?: string;
+  expandIcon?: string;
+  collapseIcon?: string;
+  reduceIcon?: string;
   userIcon?: string;
   agentIcon?: string;
 }
@@ -59,6 +60,7 @@ export interface ChatConfig {
   userIconColor?: string;
   toggleText?: string;
   initialMessage?: string;
+  placeholder?: string;
 }
 
 export interface Message {
