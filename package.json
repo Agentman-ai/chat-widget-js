@@ -1,9 +1,19 @@
 {
   "name": "@agentman/chat-widget",
-  "version": "0.10.1",
+  "version": "0.12.0",
   "description": "A customizable chat widget for Agentman AI integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
+    }
+  },
   "files": [
     "dist",
     "README.md",
@@ -20,7 +30,7 @@
     "test": "echo \"No tests specified\" && exit 0",
     "lint": "echo \"No lint specified\" && exit 0",
     "dev": "http-server . -p 8000 -c-1",
-    "docs": "mkdir -p docs && cp ChatWidget.md docs/index.md"
+    "docs": "mkdir -p docs && cp README.md docs/index.md"
   },
   "keywords": [
     "chat",
@@ -31,13 +41,14 @@
     "react",
     "javascript"
   ],
-  "homepage": "https://github.com/agentman-ai/chat-widget#readme",
+  "homepage": "https://github.com/Agentman-ai/.github/tree/main/chat-widget-demo#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agentman-ai/chat-widget.git"
+    "url": "git+https://github.com/Agentman-ai/.github.git",
+    "directory": "chat-widget-demo"
   },
   "bugs": {
-    "url": "https://github.com/agentman-ai/chat-widget/issues"
+    "url": "https://github.com/Agentman-ai/.github/issues"
   },
   "devDependencies": {
     "http-server": "^14.1.1",
