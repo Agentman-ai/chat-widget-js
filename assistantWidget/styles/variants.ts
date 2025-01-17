@@ -10,7 +10,7 @@ export const variantStyles = {
   
       .chat-widget--corner .chat-container {
         position: fixed;
-        bottom: var(--chat-container-bottom, 80px);
+        bottom: var(--chat-container-bottom, 20px);
         right: var(--chat-container-right, 20px);
         width: var(--chat-container-width, 360px);
         height: var(--chat-container-height, 560px);

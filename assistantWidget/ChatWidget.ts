@@ -8,6 +8,7 @@ import { MessageRenderer } from './message-renderer/message-renderer'
 import { OfflineParser } from './message-renderer/offline-parser';
 import { user, agent, close, send, minimize, maximize, resize } from './assets/icons';
 import { logo, logo as headerLogo } from './assets/logo';
+import { isImageUrl, getIconHtml } from './utils/icon-utils';
 
 export class ChatWidget {
   // Track instances by containerId
@@ -38,7 +39,9 @@ export class ChatWidget {
     minimizeIcon: minimize,
     maximizeIcon: maximize,
     expandIcon: resize,
-    reduceIcon: resize
+    reduceIcon: resize,
+    userIcon: user,
+    agentIcon: agent
   };
 
   private loadingMessageElement: HTMLElement | null = null;
@@ -249,7 +252,9 @@ export class ChatWidget {
         minimizeIcon: config.icons?.minimizeIcon || ChatWidget.defaultIcons.minimizeIcon,
         maximizeIcon: config.icons?.maximizeIcon || ChatWidget.defaultIcons.maximizeIcon,
         expandIcon: config.icons?.expandIcon || ChatWidget.defaultIcons.expandIcon,
-        reduceIcon: config.icons?.reduceIcon || ChatWidget.defaultIcons.reduceIcon
+        reduceIcon: config.icons?.reduceIcon || ChatWidget.defaultIcons.reduceIcon,
+        userIcon: config.icons?.userIcon || ChatWidget.defaultIcons.userIcon,
+        agentIcon: config.icons?.agentIcon || ChatWidget.defaultIcons.agentIcon
       }
     };
   }
@@ -273,8 +278,8 @@ export class ChatWidget {
 
   private initializeAssets(): ChatAssets {
     const assets = {
-      logo: this.config.logo || logo,
-      headerLogo: this.config.headerLogo || headerLogo
+      logo: getIconHtml(this.config.logo || logo, 'Main Logo', 42),
+      headerLogo: getIconHtml(this.config.headerLogo || headerLogo, 'Header Logo', 32)
     };
     
     return assets;
@@ -400,7 +405,7 @@ export class ChatWidget {
       container.style.width = this.config.initialWidth || '360px';
       container.style.height = this.config.initialHeight || '560px';
       container.style.borderRadius = '12px';
-      container.style.bottom = '80px';
+      container.style.bottom = '20px';
       container.style.right = '20px';
 
       document.body.style.overflow = '';
@@ -476,6 +481,8 @@ export class ChatWidget {
       if (theme.userForegroundColor) this.element.style.setProperty('--chat-user-foreground-color', theme.userForegroundColor);
       if (theme.headerBackgroundColor) this.element.style.setProperty('--chat-header-background-color', theme.headerBackgroundColor);
       if (theme.headerTextColor) this.element.style.setProperty('--chat-header-text-color', theme.headerTextColor);
+      if (theme.agentIconColor) this.element.style.setProperty('--chat-agent-icon-color', theme.agentIconColor);
+      if (theme.userIconColor) this.element.style.setProperty('--chat-user-icon-color', theme.userIconColor);
     }
   }
 
@@ -513,32 +520,12 @@ export class ChatWidget {
   }
 
   private generateTemplate(showToggle: boolean): string {
-    const isImageUrl = (url: string) => {
-      if (typeof url !== 'string') {
-        return false;
-      }
-      // If it contains HTML tags, it's not a URL
-      if (url.includes('<') && url.includes('>')) {
-        return false;
-      }
-      // Check for URLs
-      return url.startsWith('/') || url.startsWith('http') || url.startsWith('https');
-    };
-    
-    const logoHtml = isImageUrl(this.assets.logo)
-      ? `<img src="${this.assets.logo}" alt="logo" width="42" height="42"/>`
-      : this.assets.logo;
-    
-    const headerLogoHtml = isImageUrl(this.assets.headerLogo)
-      ? `<img src="${this.assets.headerLogo}" alt="logo" width="32" height="32"/>`
-      : this.assets.headerLogo;
-      
     return `
       ${showToggle ? `
         <button class="chat-toggle">
           <div class="chat-toggle-content">
             <div class="chat-logo">
-                ${logoHtml}
+                ${this.assets.logo}
               </div>          
             <span class="chat-toggle-text">${this.config.toggleText || 'Ask Agentman'}</span>
           </div>
@@ -549,7 +536,7 @@ export class ChatWidget {
           <div class="chat-header-content">
             <div class="chat-logo-title">
               <div class="chat-logo">
-                ${headerLogoHtml}
+                ${this.assets.headerLogo}
               </div>
               <h3>${this.config.title}</h3>
             </div>
@@ -923,7 +910,37 @@ export class ChatWidget {
     }
   }
 
-  private handleResponse(responseData: APIResponse[]): void {
+  public addMessage(message: Message): void {
+    const messagesContainer = this.element.querySelector('.chat-messages');
+    if (!messagesContainer) {
+      console.error('Messages container not found');
+      return;
+    }
+
+    this.stateManager.addMessage(message);
+
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${message.sender}`;
+
+    const renderedContent = this.messageRenderer.render(message);
+    const icon = message.sender === 'user' 
+      ? this.config.icons?.userIcon || ChatWidget.defaultIcons.userIcon 
+      : this.config.icons?.agentIcon || ChatWidget.defaultIcons.agentIcon;
+
+    messageElement.innerHTML = `
+      <div class="message-avatar ${message.sender}" style="color: ${message.sender === 'user' ? this.theme.userIconColor : this.theme.agentIconColor}">
+        ${getIconHtml(icon, `${message.sender} avatar`)}
+      </div>
+      <div class="message-content">
+        ${renderedContent}
+      </div>
+    `;
+
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  private async handleResponse(responseData: APIResponse[]): Promise<void> {
     if (!Array.isArray(responseData)) {
       console.error('Invalid response format:', responseData);
       return;
@@ -957,33 +974,6 @@ export class ChatWidget {
   }
 
 
-  private addMessage(message: Message): void {
-    const messagesContainer = this.element.querySelector('.chat-messages');
-    if (!messagesContainer) {
-      console.error('Messages container not found');
-      return;
-    }
-
-    this.stateManager.addMessage(message);
-
-    const messageElement = document.createElement('div');
-    messageElement.className = `message ${message.sender}`;
-
-    const renderedContent = this.messageRenderer.render(message);
-
-    messageElement.innerHTML = `
-      <div class="message-avatar ${message.sender}" style="color: ${message.sender === 'user' ? this.theme.userIconColor : this.theme.agentIconColor}">
-        ${message.sender === 'user' ? user : agent}
-      </div>
-      <div class="message-content">
-        ${renderedContent}
-      </div>
-    `;
-
-    messagesContainer.appendChild(messageElement);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  }
-
   private isValidMessage(msg: APIResponse): boolean {
     return (
       typeof msg === 'object' &&
@@ -1003,14 +993,23 @@ export class ChatWidget {
   }
 
   private showLoadingIndicator(): void {
+    if (this.loadingMessageElement) {
+      return;
+    }
+
     const messagesContainer = this.element.querySelector('.chat-messages');
-    if (!messagesContainer) return;
+    if (!messagesContainer) {
+      return;
+    }
 
     this.loadingMessageElement = document.createElement('div');
     this.loadingMessageElement.className = 'message agent loading-message';
+
+    const icon = this.config.icons?.agentIcon || ChatWidget.defaultIcons.agentIcon;
+
     this.loadingMessageElement.innerHTML = `
       <div class="message-avatar" style="color: ${this.theme.agentIconColor}">
-        ${agent}
+        ${getIconHtml(icon, 'agent avatar')}
       </div>
       <div class="message-content">
         <div class="loading-container">

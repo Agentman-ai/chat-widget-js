@@ -24,7 +24,7 @@ export const baseStyles = `
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
+    padding: 8px 12px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     min-height: 48px;
     background: var(--chat-header-background-color, #059669);
@@ -143,7 +143,7 @@ export const baseStyles = `
 
   .chat-input-container {
     position: relative;
-    padding: 12px 16px;
+    padding: 8px 12px;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     background: white;
     z-index: 2;
@@ -151,48 +151,57 @@ export const baseStyles = `
 
   .chat-input-wrapper {
     position: relative;
-    display: flex;
-    align-items: flex-end;
-    gap: 8px;
-    background: white;
+    width: 100%;
   }
 
   .chat-input {
-    flex: 1;
+    width: 100%;
     min-height: 40px;
     max-height: 120px;
-    padding: 8px 40px 8px 12px;
+    padding: 8px 44px 8px 12px;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
+    border-radius: 8px;
     font-size: 14px;
     line-height: 1.4;
     resize: none;
     overflow-y: auto;
     background: white;
+    box-sizing: border-box;
   }
 
   .chat-send {
-    width: 40px;
-    height: 40px;
-    padding: 8px;
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 32px;
+    height: 32px;
+    padding: 6px;
     background: var(--chat-header-background-color, #059669);
     border: none;
-    border-radius: 50%;
+    border-radius: 4px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s;
+    transition: filter 0.2s;
   }
 
   .chat-send:hover {
-    opacity: 0.9;
+    filter: brightness(1.5);
+  }
+
+  .chat-send:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
   }
 
   .chat-send svg {
     width: 20px;
     height: 20px;
-    fill: var(--chat-header-text-color, #FFFFFF);
+  }
+
+  .chat-send:disabled svg {
+    opacity: 0.8;
   }
 
   .chat-initializing {

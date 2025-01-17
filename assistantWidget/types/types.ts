@@ -17,7 +17,9 @@ export interface ChatTheme {
 }
 
 export interface ChatAssets {
+  /** URL to image or SVG string for the main logo */
   logo: string;
+  /** URL to image or SVG string for the header logo */
   headerLogo: string;
 }
 
@@ -28,6 +30,8 @@ export interface ChatIcons {
   maximizeIcon: string;
   expandIcon: string;
   reduceIcon: string;
+  userIcon?: string;
+  agentIcon?: string;
 }
 
 export interface ChatConfig {
