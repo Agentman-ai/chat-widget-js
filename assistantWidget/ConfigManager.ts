@@ -75,15 +75,10 @@ export class ConfigManager {
   }
 
   private initializeAssets(): ChatAssets {
-    const validImagePattern = /^(data:image\/|https:\/\/|\/)/i;
-    const assets: ChatAssets = {
-      logo: '',
-      headerLogo
+    const assets = {
+      logo: this.config.logo || ConfigManager.defaultAssets.logo,
+      headerLogo: this.config.headerLogo || ConfigManager.defaultAssets.headerLogo,
     };
-
-    if (this.config.logo && validImagePattern.test(this.config.logo)) {
-      assets.logo = this.config.logo;
-    }
 
     return assets;
   }
@@ -104,7 +99,7 @@ export class ConfigManager {
         if (value && validImagePattern.test(value)) {
           icons[key as keyof ChatIcons] = value;
         } else {
-          console.warn(`Invalid icon URL for ${key}, falling back to default`);
+          //  do nothing
         }
       });
     }

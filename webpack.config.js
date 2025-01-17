@@ -36,13 +36,12 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     library: {
       name: '@agentman/chat-widget',
-      type: 'umd',
-      export: 'default'
+      type: 'umd'
     },
-    globalObject: 'this'
+    globalObject: 'typeof self !== "undefined" ? self : this',
+    umdNamedDefine: true
   },
-  externals: {
-    'react': 'react',
-    'react-dom': 'react-dom'
+  optimization: {
+    minimize: true
   }
 };

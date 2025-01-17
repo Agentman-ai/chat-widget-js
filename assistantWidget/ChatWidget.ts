@@ -272,10 +272,12 @@ export class ChatWidget {
   }
 
   private initializeAssets(): ChatAssets {
-    return {
+    const assets = {
       logo: this.config.logo || logo,
       headerLogo: this.config.headerLogo || headerLogo
     };
+    
+    return assets;
   }
 
   private initialize() {
@@ -511,14 +513,32 @@ export class ChatWidget {
   }
 
   private generateTemplate(showToggle: boolean): string {
+    const isImageUrl = (url: string) => {
+      if (typeof url !== 'string') {
+        return false;
+      }
+      // If it contains HTML tags, it's not a URL
+      if (url.includes('<') && url.includes('>')) {
+        return false;
+      }
+      // Check for URLs
+      return url.startsWith('/') || url.startsWith('http') || url.startsWith('https');
+    };
+    
+    const logoHtml = isImageUrl(this.assets.logo)
+      ? `<img src="${this.assets.logo}" alt="logo" width="42" height="42"/>`
+      : this.assets.logo;
+    
+    const headerLogoHtml = isImageUrl(this.assets.headerLogo)
+      ? `<img src="${this.assets.headerLogo}" alt="logo" width="32" height="32"/>`
+      : this.assets.headerLogo;
+      
     return `
       ${showToggle ? `
         <button class="chat-toggle">
           <div class="chat-toggle-content">
             <div class="chat-logo">
-                ${this.assets.logo.startsWith('/')
-                  ? `<img src="${this.assets.logo}" alt="logo" width="42" height="42"/>`
-                  : this.assets.logo}
+                ${logoHtml}
               </div>          
             <span class="chat-toggle-text">${this.config.toggleText || 'Ask Agentman'}</span>
           </div>
@@ -529,9 +549,7 @@ export class ChatWidget {
           <div class="chat-header-content">
             <div class="chat-logo-title">
               <div class="chat-logo">
-                ${this.assets.headerLogo.startsWith('/')
-                  ? `<img src="${this.assets.headerLogo}" alt="logo" width="32" height="32"/>`
-                  : this.assets.headerLogo}
+                ${headerLogoHtml}
               </div>
               <h3>${this.config.title}</h3>
             </div>
@@ -565,7 +583,6 @@ export class ChatWidget {
         </div>
       </div>
     `;
-
   }
 
   private attachEventListeners(): void {

@@ -23,7 +23,7 @@
     <div id="chat-container"></div>
 
     <!-- Include the bundled widget -->
-    <script src="dist/chat-widget.js"></script>
+    <script src="dist/index.js"></script>
     <script>
         const config = {
             apiUrl: 'https://studio-api.chainofagents.ai',
@@ -53,11 +53,10 @@
         };
 
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Initializing ChatWidget with config:', config);
             try {
                 // Initialize the ChatWidget using the exported constructor
-                const chatWidget = new window.ChatWidget(config);
-                console.log('ChatWidget initialized successfully');
+                const ChatWidget = window['@agentman/chat-widget'].ChatWidget;
+                const chatWidget = new ChatWidget(config);
 
                 // Add error event listener
                 window.addEventListener('unhandledrejection', function(event) {
