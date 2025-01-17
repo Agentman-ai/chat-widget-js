@@ -56,8 +56,6 @@ const config = {
   theme: {
     backgroundColor: '#ffffff',    // Main background color
     textColor: '#111827',         // Main text color
-    buttonColor: '#059669',       // Button background color
-    buttonTextColor: '#ffffff',   // Button text color
     agentBackgroundColor: '#f3f4f6',  // Agent message background
     userBackgroundColor: '#10b981',   // User message background
     agentForegroundColor: '#000000',  // Agent message text
@@ -70,15 +68,8 @@ const config = {
   
   // Icons and assets
   icons: {
-    closeIcon: '<svg>...</svg>',    // Custom close icon
-    sendIcon: '<svg>...</svg>',     // Custom send icon
-    minimizeIcon: '<svg>...</svg>', // Custom minimize icon
-    maximizeIcon: '<svg>...</svg>', // Custom maximize icon
-    expandIcon: '<svg>...</svg>',   // Custom expand icon
-    collapseIcon: '<svg>...</svg>', // Custom collapse icon
-    reduceIcon: '<svg>...</svg>',   // Custom reduce icon
-    userIcon: 'https://example.com/user-icon.png',  // User avatar
-    agentIcon: '<svg>...</svg>'     // Agent avatar
+    userIcon: 'https://example.com/user-icon.png',  // User avatar (URL or SVG)
+    agentIcon: '<svg>...</svg>'     // Agent avatar (URL or SVG)
   },
   
   // Logos
@@ -126,8 +117,6 @@ The theme object supports the following properties:
 interface ChatTheme {
   backgroundColor: string;    // Main background color
   textColor: string;         // Main text color
-  buttonColor: string;       // Button background color
-  buttonTextColor: string;   // Button text color
   agentBackgroundColor: string;  // Agent message background
   userBackgroundColor: string;   // User message background
   agentForegroundColor: string;  // Agent message text
@@ -141,26 +130,19 @@ interface ChatTheme {
 
 ## Icon Customization
 
-The chat widget supports customization of all icons through the `icons` configuration option:
+The chat widget supports customization of user and agent avatars through the `icons` configuration option:
 
 ```typescript
 interface ChatIcons {
-  closeIcon?: string;    // Close button icon
-  sendIcon?: string;     // Send message button icon
-  minimizeIcon?: string; // Minimize chat icon
-  maximizeIcon?: string; // Maximize chat icon
-  expandIcon?: string;   // Expand chat icon
-  collapseIcon?: string; // Collapse chat icon
-  reduceIcon?: string;   // Reduce size icon
   userIcon?: string;     // User avatar icon
   agentIcon?: string;    // Agent avatar icon
 }
 ```
 
-Each icon can be specified as either:
+Each avatar icon can be specified as either:
 - A URL to an image file (PNG, JPG, etc.)
 - An SVG string
-- For avatar icons (userIcon, agentIcon), the color can be customized using `userIconColor` and `agentIconColor` in the theme when using SVG
+- The color of SVG icons can be customized using `userIconColor` and `agentIconColor` in the theme when using SVG
 
 ## License
 
