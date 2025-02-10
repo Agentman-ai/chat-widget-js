@@ -1,4 +1,8 @@
-# Agentman Chat Widget Documentation
+# Agentman Chat Widget JS
+
+[![CI](https://github.com/Agentman-ai/chat-widget-js/actions/workflows/ci.yml/badge.svg)](https://github.com/Agentman-ai/chat-widget-js/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/%40agentman%2Fchat-widget-js.svg)](https://badge.fury.io/js/%40agentman%2Fchat-widget-js)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A customizable chat widget that can be easily integrated into any web application. The widget provides a modern, responsive interface for users to interact with Agentman AI.
 
