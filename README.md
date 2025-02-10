@@ -24,7 +24,7 @@ A customizable chat widget that can be easily integrated into any web applicatio
 ## Installation
 
 ```bash
-npm install @agentman/chat-widget
+npm install @agentman/chat-widget-js
 ```
 
 ## Usage
@@ -32,7 +32,7 @@ npm install @agentman/chat-widget
 ### JavaScript
 
 ```javascript
-import { ChatWidget } from '@agentman/chat-widget';
+import { ChatWidget } from '@agentman/chat-widget-js';
 
 const config = {
   // Required settings
