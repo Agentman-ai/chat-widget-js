@@ -1,4 +1,4 @@
-# Agentman Chat Widget JS
+# Agentman Chat Widget
 
 [![CI](https://github.com/Agentman-ai/chat-widget-js/actions/workflows/ci.yml/badge.svg)](https://github.com/Agentman-ai/chat-widget-js/actions/workflows/ci.yml)
 [![npm version](https://badge.fury.io/js/%40agentman%2Fchat-widget-js.svg)](https://badge.fury.io/js/%40agentman%2Fchat-widget-js)
