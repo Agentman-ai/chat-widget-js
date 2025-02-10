@@ -7,8 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
-    name: Build and Test
+  ci:
+    name: CI Pipeline
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -21,18 +21,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: Install dependencies
+    - name: Install Dependencies
       run: npm ci
-    - name: Build package
+    - name: Build Package
       run: npm run build
-    - name: Run linter
+    - name: Run Linter
       run: npm run lint
-    - name: Run tests
-      run: npm test
+    - name: Run Tests
+      run: npm run test:ci
 
   publish:
-    name: Publish to NPM
-    needs: build-and-test
+    name: Publish Package
+    needs: ci
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
@@ -41,9 +41,9 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
-      - name: Build package
+      - name: Build Package
         run: npm run build
       - name: Publish to NPM
         run: npm publish --access public
